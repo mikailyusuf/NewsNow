@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/currentNewsFragment"
+        android:enabled="true"
+        android:icon="@drawable/current"
+        android:title="CURRENT NEWS"/>
+    <item
+        android:id="@+id/savedNewsFragment"
+        android:icon="@drawable/storage"
+        android:title="SAVED NEWS"/>
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/search"
+        android:title="SEARCH"/>
+
+</menu>
