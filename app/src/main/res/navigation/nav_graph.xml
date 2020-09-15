@@ -22,7 +22,11 @@
         android:id="@+id/articlesFragment"
         android:name="com.newsnow.ui.ArticlesFragment"
         android:label="fragment_articles"
-        tools:layout="@layout/fragment_articles" />
+        tools:layout="@layout/fragment_articles" >
+        <argument
+            android:name="article"
+            app:argType="com.newsnow.model.Article" />
+    </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
         android:name="com.newsnow.ui.SavedNewsFragment"
@@ -48,5 +52,6 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_out_left"
             app:popExitAnim="@anim/slide_out_right"/>
+
     </fragment>
 </navigation>

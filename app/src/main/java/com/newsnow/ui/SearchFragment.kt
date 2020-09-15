@@ -1,60 +1,167 @@
 package com.newsnow.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.newsnow.R
+import com.newsnow.adapters.NewsAdapter
+import com.newsnow.utils.Constants
+import com.newsnow.utils.Constants.Companion.SEARCH_DELAY
+import com.newsnow.utils.Resource
+import com.newsnow.viewmodel.NewsViewModel
+import kotlinx.android.synthetic.main.fragment_current_news.*
+import kotlinx.android.synthetic.main.fragment_current_news.progressBar
+import kotlinx.android.synthetic.main.fragment_current_news.recyclerView
+import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    lateinit var newsViewModel: NewsViewModel
+
+    lateinit var newsAdapter: NewsAdapter
+    val TAG = "SearchFragment"
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        newsViewModel = (activity as NewsActivity).newsViewModel
+        var job:Job? = null
+        setupRecycler()
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("article",it)
+            }
+
+            findNavController().navigate(R.id.action_searchFragment_to_articlesFragment,bundle)
+        }
+
+        searchQuery.addTextChangedListener {editable->
+
+            job?.cancel()
+            job = MainScope().launch {
+                delay(SEARCH_DELAY)
+                editable.let {
+                    if (editable.toString().isNotEmpty())
+                    {
+                        newsViewModel.searchNews(editable.toString())
+                    }
+                }
+            }
+
+        }
+
+
+        newsViewModel.searchNews.observe(viewLifecycleOwner, Observer {response->
+
+            when(response)
+            {
+                is Resource.Success->{
+                    hideProgressBar()
+                    response.data?.let {newsList->
+
+                        newsAdapter.differ.submitList(newsList.articles.toList())
+
+                        val totalPages = newsList.totalResults / Constants.QUERY_PAGE_SIZE +2
+                        isLastPage  = newsViewModel.searchNewsPage == totalPages
+                        if (isLastPage)
+                        {
+                            recyclerView.setPadding(0,0,0,0)
+                        }
+                    }
+                }
+
+                is Resource.Error->
+                {
+                    hideProgressBar()
+                    response.message?.let {
+                        Log.e(TAG,"An error occured :$it")
+                    }
+                }
+
+                is Resource.Loading ->
+                {
+                    showProgressBar()
+                }
+
+
+
+            }
+
+        })
+    }
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
+    val scrollListener = object: RecyclerView.OnScrollListener(){
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPOsition  = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.itemCount
+            val totalitemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+            val isAtLastItem = firstVisibleItemPOsition + visibleItemCount >= totalitemCount
+            val isNotatBeginning = firstVisibleItemPOsition >= 0
+            val isTotalMoreThanVisible = totalitemCount >= Constants.QUERY_PAGE_SIZE
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isScrolling && isNotatBeginning && isTotalMoreThanVisible
+
+            if (shouldPaginate){
+                newsViewModel.searchNews(searchQuery.text.toString())
+                isScrolling = false
+            }
+
+
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+            {
+                isScrolling = true
+            }
+
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+    private fun hideProgressBar()
+    {
+        progressBar.visibility = View.INVISIBLE
+        isLoading = false
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun showProgressBar()
+    {
+        progressBar.visibility = View.VISIBLE
+        isLoading = true
+
+    }
+
+
+    private fun setupRecycler()
+    {
+        newsAdapter = NewsAdapter()
+        recyclerView.apply {
+            addOnScrollListener(this@SearchFragment.scrollListener)
+            adapter = newsAdapter
+            layoutManager = LinearLayoutManager(activity)
+        }
     }
 }
