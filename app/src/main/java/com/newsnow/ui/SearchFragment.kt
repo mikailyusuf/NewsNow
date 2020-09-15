@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -89,7 +90,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 {
                     hideProgressBar()
                     response.message?.let {
-                        Log.e(TAG,"An error occured :$it")
+                        Toast.makeText(activity,"Error Occured: $it", Toast.LENGTH_SHORT).show()
                     }
                 }
 

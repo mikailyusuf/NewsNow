@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,7 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
                 putSerializable("article",it)
+                Log.d("TESTTAG",it.toString())
             }
 
             findNavController().navigate(R.id.action_currentNewsFragment_to_articlesFragment,bundle)
@@ -61,7 +63,7 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
                 {
                     hideProgressBar()
                     response.message?.let {
-                        Log.e(TAG,"An error occured :$it")
+                       Toast.makeText(activity,"Error Occured: $it",Toast.LENGTH_SHORT).show()
                     }
                 }
 
