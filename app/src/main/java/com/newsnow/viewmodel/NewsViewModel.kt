@@ -1,24 +1,27 @@
 package com.newsnow.viewmodel
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities.*
 import android.os.Build
 import androidx.lifecycle.*
-import com.newsnow.NewsApplication
+import com.newsnow.di.NewsApplication
 import com.newsnow.model.Article
 import com.newsnow.model.NewsResponse
 import com.newsnow.repository.NewsRepository
 import com.newsnow.utils.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.hilt.lifecycle.ViewModelInject
+import com.newsnow.utils.NetWorkHelper
 import retrofit2.Response
 import java.io.IOException
 
-class NewsViewModel(app: Application, val repository: NewsRepository) : AndroidViewModel(app) {
+
+class NewsViewModel @ViewModelInject constructor(
+    private val repository: NewsRepository,
+    private val networkHelper: NetWorkHelper
+) : ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
@@ -37,13 +40,13 @@ class NewsViewModel(app: Application, val repository: NewsRepository) : AndroidV
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
 
-        safebreakingNewsCall(countryCode)
+        getNews(countryCode)
     }
 
 
-    fun searchNews(searchQuery: String) = viewModelScope.launch {
+    fun getSearchNews(searchQuery: String) = viewModelScope.launch {
 
-        safeSearchCall(searchQuery)
+        searchNews(searchQuery)
 
     }
 
@@ -71,12 +74,33 @@ class NewsViewModel(app: Application, val repository: NewsRepository) : AndroidV
 
     }
 
-    private suspend fun safebreakingNewsCall(countryCode: String) {
+    private suspend fun getNews(countryCode: String) {
         breakingNews.postValue(Resource.Loading())
         try {
-            if (hasInternet()) {
+            if (networkHelper.isNetworkConnected()) {
                 val response = repository.getBreakingNews(countryCode, breakingNewsPage)
-                breakingNews.postValue(handleBreakingNewsResponse(response))
+
+                if (response.isSuccessful) {
+                    response.body()?.let { result ->
+
+                        breakingNewsPage++
+                        if (breakingNewsResponse == null) {
+                            breakingNewsResponse = result
+                        } else {
+                            val oldArticle = breakingNewsResponse?.articles
+                            val newArticle = result.articles
+                            oldArticle?.addAll(newArticle)
+                        }
+                        breakingNews.postValue(Resource.Success(
+                            breakingNewsResponse ?: result))
+
+                    }
+                }
+                else{
+                    breakingNews.postValue( Resource.Error(response.message()))
+
+                }
+
             } else {
                 breakingNews.postValue(Resource.Error("No Internet Connection"))
             }
@@ -91,12 +115,35 @@ class NewsViewModel(app: Application, val repository: NewsRepository) : AndroidV
     }
 
 
-    private suspend fun safeSearchCall(Query: String) {
+    private suspend fun searchNews(Query: String) {
         searchNews.postValue(Resource.Loading())
         try {
-            if (hasInternet()) {
+            if (networkHelper.isNetworkConnected()) {
                 val response = repository.searchNews(Query, searchNewsPage)
-                searchNews.postValue(handleSearchNewsResponse(response))
+
+                if (response.isSuccessful)
+                {
+                    response.body()?.let { result ->
+
+                        searchNewsPage++
+                        if (searchNewsResponse == null) {
+                            breakingNewsResponse = result
+                        } else {
+                            val oldArticle = searchNewsResponse?.articles
+                            val newArticle = result.articles
+                            oldArticle?.addAll(newArticle)
+                        }
+                        searchNews.postValue(Resource.Success(
+                            searchNewsResponse ?: result))
+
+                    }
+                }
+
+                else{
+                    searchNews.postValue( Resource.Error(response.message()))
+
+                }
+
             } else {
                 searchNews.postValue(Resource.Error("No Internet Connection"))
             }
@@ -134,43 +181,17 @@ class NewsViewModel(app: Application, val repository: NewsRepository) : AndroidV
     }
 
 
-    fun hasInternet(): Boolean {
-        val connectivityManager =
-            getApplication<NewsApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val capabilties =
-                connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-            return when {
-                capabilties.hasTransport(TRANSPORT_WIFI) -> true
-                capabilties.hasTransport(TRANSPORT_CELLULAR) -> true
-                capabilties.hasTransport(TRANSPORT_ETHERNET) -> true
-                else -> false
-
-            }
-        } else {
-            connectivityManager.activeNetworkInfo?.run {
-                return when (type) {
-                    TYPE_WIFI -> true
-                    TYPE_MOBILE -> true
-                    TYPE_ETHERNET -> true
-                    else -> true
-
-                }
-            }
-        }
-        return false
-    }
 
     fun saveArticle(article: Article) = viewModelScope.launch {
         repository.insert(article)
     }
 
     fun deleteNews(article: Article) = viewModelScope.launch {
-        repository.delete(article)
+
+        repository.deleteArticle(article)
     }
 
-    fun getSavedNews() = repository.getSavedNews()
+    fun getSavedNews() = repository.getArticles()
 
 
 }

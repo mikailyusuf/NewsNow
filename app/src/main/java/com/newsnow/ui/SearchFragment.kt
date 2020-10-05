@@ -32,14 +32,15 @@ import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
-    lateinit var newsViewModel: NewsViewModel
+//    lateinit var newsViewModel: NewsViewModel
+    private val newsViewModel : NewsViewModel by viewModels()
 
     lateinit var newsAdapter: NewsAdapter
     val TAG = "SearchFragment"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        newsViewModel = (activity as NewsActivity).newsViewModel
+//        newsViewModel = (activity as NewsActivity).newsViewModel
         var job:Job? = null
         setupRecycler()
 
@@ -59,7 +60,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 editable.let {
                     if (editable.toString().isNotEmpty())
                     {
-                        newsViewModel.searchNews(editable.toString())
+                        newsViewModel.getSearchNews(editable.toString())
                     }
                 }
             }
@@ -123,7 +124,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isScrolling && isNotatBeginning && isTotalMoreThanVisible
 
             if (shouldPaginate){
-                newsViewModel.searchNews(searchQuery.text.toString())
+                newsViewModel.getSearchNews(searchQuery.text.toString())
                 isScrolling = false
             }
 

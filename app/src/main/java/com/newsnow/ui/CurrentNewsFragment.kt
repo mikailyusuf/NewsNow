@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,13 +23,15 @@ import kotlinx.android.synthetic.main.fragment_current_news.*
 
 
 class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
-    lateinit var newsViewModel: NewsViewModel
+    private val newsViewModel : NewsViewModel by viewModels()
+
+//    lateinit var newsViewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
     val TAG = "CurrentNewsFragment"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        newsViewModel = (activity as NewsActivity).newsViewModel
+//        newsViewModel = (activity as NewsActivity).newsViewModel
         setupRecycler()
         newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
@@ -112,7 +115,7 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isScrolling && isNotatBeginning && isTotalMoreThanVisible
 
             if (shouldPaginate){
-                newsViewModel.getBreakingNews("us")
+                newsViewModel.getBreakingNews("ng")
                 isScrolling = false
             }
 

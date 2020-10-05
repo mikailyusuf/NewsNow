@@ -10,8 +10,11 @@ import com.newsnow.db.ArticleDb
 import com.newsnow.repository.NewsRepository
 import com.newsnow.viewmodel.NewsViewModel
 import com.newsnow.viewmodel.NewsViewModelProviderFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_news.*
 
+
+@AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
 
     lateinit var newsViewModel: NewsViewModel
