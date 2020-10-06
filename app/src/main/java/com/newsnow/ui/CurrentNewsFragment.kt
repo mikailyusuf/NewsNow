@@ -19,9 +19,11 @@ import com.newsnow.adapters.NewsAdapter
 import com.newsnow.utils.Constants.Companion.QUERY_PAGE_SIZE
 import com.newsnow.utils.Resource
 import com.newsnow.viewmodel.NewsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_news.*
 
 
+@AndroidEntryPoint
 class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
     private val newsViewModel : NewsViewModel by viewModels()
 

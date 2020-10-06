@@ -20,6 +20,7 @@ import com.newsnow.utils.Constants
 import com.newsnow.utils.Constants.Companion.SEARCH_DELAY
 import com.newsnow.utils.Resource
 import com.newsnow.viewmodel.NewsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_news.*
 import kotlinx.android.synthetic.main.fragment_current_news.progressBar
 import kotlinx.android.synthetic.main.fragment_current_news.recyclerView
@@ -29,7 +30,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
 //    lateinit var newsViewModel: NewsViewModel

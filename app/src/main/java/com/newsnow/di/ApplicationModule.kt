@@ -1,7 +1,10 @@
-package com.newsnow.api
+package com.newsnow.di
 
 import android.content.Context
 import androidx.room.Room
+import com.newsnow.api.ApiHelper
+import com.newsnow.api.ApiHelperImpl
+import com.newsnow.api.NewsApi
 import com.newsnow.db.ArticleDb
 import com.newsnow.utils.Constants.Companion.BASE_URL
 import dagger.Module
@@ -50,5 +53,9 @@ class ApplicationModule {
             .build()
             .create(NewsApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideApiHelper(apiHelper: ApiHelperImpl): ApiHelper = apiHelper
 
 }
