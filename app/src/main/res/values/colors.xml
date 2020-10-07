@@ -5,4 +5,10 @@
     <color name="colorAccent">#00B4D8</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#0B090A</color>
+    <color name="navColor">#0096C7</color>
+    <color name="searchStrokeColor">#00B4D8</color>
+    <color name="recycler_color">#FFFFFF</color>
+
+
+
 </resources>

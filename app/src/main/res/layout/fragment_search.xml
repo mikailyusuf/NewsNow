@@ -6,20 +6,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditText
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:hint="Enter Search ...."
         android:id="@+id/searchQuery"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
+        android:background="@drawable/search_background"
+        android:hint="Enter Search ...."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@id/recyclerView"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/recycler_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -17,6 +17,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_out_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_currentNewsFragment_to_articleActivity"
+            app:destination="@id/articleActivity" />
     </fragment>
     <fragment
         android:id="@+id/articlesFragment"
@@ -54,4 +57,15 @@
             app:popExitAnim="@anim/slide_out_right"/>
 
     </fragment>
+    <activity
+        android:id="@+id/articleActivity"
+        android:name="com.newsnow.ui.ArticleActivity"
+        android:label="activity_article"
+        tools:layout="@layout/activity_article" >
+
+
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </activity>
 </navigation>

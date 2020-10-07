@@ -36,12 +36,15 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
 //        newsViewModel = (activity as NewsActivity).newsViewModel
         setupRecycler()
         newsAdapter.setOnItemClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("article",it)
-                Log.d("TESTTAG",it.toString())
-            }
 
-            findNavController().navigate(R.id.action_currentNewsFragment_to_articlesFragment,bundle)
+          val url = it.url
+            val bundle = ("url" to url)
+//            val bundle = Bundle().apply {
+//                putSerializable("article",it)
+//
+//            }
+
+            findNavController().navigate(R.id.action_currentNewsFragment_to_articleActivity)
         }
 
 

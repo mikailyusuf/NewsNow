@@ -22,13 +22,14 @@ import kotlinx.android.synthetic.main.activity_news.*
 @AndroidEntryPoint
 class NewsActivity : AppCompatActivity() {
 
-    lateinit var newsViewModel: NewsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
+
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
 
         bottom_navigation.setupWithNavController(nav_container.findNavController())
 

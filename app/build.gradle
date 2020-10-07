@@ -55,6 +55,8 @@ dependencies {
     //preferences
     implementation "androidx.preference:preference-ktx:1.1.1"
 
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+
 
     // Architectural Components
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
