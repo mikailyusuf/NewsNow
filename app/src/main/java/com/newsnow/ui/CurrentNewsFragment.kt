@@ -1,5 +1,6 @@
 package com.newsnow.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -38,13 +39,17 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
         newsAdapter.setOnItemClickListener {
 
           val url = it.url
-            val bundle = ("url" to url)
+//            val bundle = ("url" to url)
 //            val bundle = Bundle().apply {
 //                putSerializable("article",it)
 //
 //            }
+            val intent = Intent(activity,ArticleActivity::class.java)
+            intent.putExtra("url",url)
+            startActivity(intent)
 
-            findNavController().navigate(R.id.action_currentNewsFragment_to_articleActivity)
+
+//            findNavController().navigate(R.id.action_currentNewsFragment_to_articleActivity,bundle)
         }
 
 

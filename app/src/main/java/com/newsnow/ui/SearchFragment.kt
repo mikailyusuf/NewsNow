@@ -145,14 +145,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun hideProgressBar()
     {
-        progressBar.visibility = View.INVISIBLE
+//        progressBar.visibility = View.INVISIBLE
         isLoading = false
 
     }
 
     private fun showProgressBar()
     {
-        progressBar.visibility = View.VISIBLE
+//        progressBar.visibility = View.VISIBLE
         isLoading = true
 
     }
