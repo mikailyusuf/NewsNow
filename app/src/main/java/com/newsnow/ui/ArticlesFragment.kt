@@ -37,7 +37,8 @@ class ArticlesFragment : Fragment(R.layout.fragment_articles) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//      val article = args.article
+      val article = args.article
+        article.url?.let { Log.d("webview", it) }
 //        webView.apply {
 //            webViewClient = WebViewClient()
 //            article.url?.let { loadUrl(it) }

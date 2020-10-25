@@ -1,30 +1,25 @@
 package com.newsnow.ui
 
-import androidx.appcompat.app.AppCompatActivity
+//import kotlinx.android.synthetic.main.activity_article.webView
 import android.os.Bundle
-import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.newsnow.R
 import com.newsnow.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_article.*
-//import kotlinx.android.synthetic.main.activity_article.webView
-import kotlinx.android.synthetic.main.fragment_articles.*
 
 @AndroidEntryPoint
 
 class ArticleActivity : AppCompatActivity() {
-    private val newsViewModel : NewsViewModel by viewModels()
+    private val newsViewModel: NewsViewModel by viewModels()
 
     private lateinit var webView: WebView
 
-//    private val args:ArticleActivityArgs by navArgs()
+    private val args: ArticleActivityArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +27,9 @@ class ArticleActivity : AppCompatActivity() {
         webView = findViewById(R.id.webView)
         val fab = findViewById<FloatingActionButton>(R.id.fab)
 
-        val data = intent
-        val url = data.getStringExtra("url")
+        val article = args.article
+        val url = article.url
+
 
         if (url != null) {
             webView.webViewClient = object : WebViewClient() {
@@ -47,9 +43,9 @@ class ArticleActivity : AppCompatActivity() {
             webView.loadUrl(url)
         }
         fab.setOnClickListener {
-//            newsViewModel.saveArticle()
-        }
+            newsViewModel.saveArticle(article)
 
+        }
 
     }
 }

@@ -62,10 +62,8 @@
         android:name="com.newsnow.ui.ArticleActivity"
         android:label="activity_article"
         tools:layout="@layout/activity_article" >
-
-
         <argument
-            android:name="url"
-            app:argType="string" />
+            android:name="article"
+            app:argType="com.newsnow.model.Article" />
     </activity>
 </navigation>

@@ -28,28 +28,25 @@ import kotlinx.android.synthetic.main.fragment_current_news.*
 class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
     private val newsViewModel : NewsViewModel by viewModels()
 
-//    lateinit var newsViewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
     val TAG = "CurrentNewsFragment"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        newsViewModel = (activity as NewsActivity).newsViewModel
         setupRecycler()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            setupRecycler()
+
+        }
         newsAdapter.setOnItemClickListener {
 
-          val url = it.url
-//            val bundle = ("url" to url)
-//            val bundle = Bundle().apply {
-//                putSerializable("article",it)
-//
-//            }
-            val intent = Intent(activity,ArticleActivity::class.java)
-            intent.putExtra("url",url)
-            startActivity(intent)
+            val bundle = Bundle().apply {
+                putSerializable("article",it)
 
+            }
 
-//            findNavController().navigate(R.id.action_currentNewsFragment_to_articleActivity,bundle)
+            findNavController().navigate(R.id.action_currentNewsFragment_to_articleActivity,bundle)
         }
 
 
@@ -143,7 +140,6 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
 
         }
     }
-
 
     private fun setupRecycler()
     {

@@ -104,6 +104,9 @@ dependencies {
     // ...with Java.
     testAnnotationProcessor 'com.google.dagger:hilt-android-compiler:2.28-alpha'
 
+    //Custom Loader
+    compile 'com.tuyenmonkey:mkloader:1.4.0'
+
 
     // For instrumented tests.
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.28-alpha'
@@ -111,6 +114,8 @@ dependencies {
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.28-alpha'
     // ...with Java.
     androidTestAnnotationProcessor 'com.google.dagger:hilt-android-compiler:2.28-alpha'
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0"
 
 }
 kapt {
