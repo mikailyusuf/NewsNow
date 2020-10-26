@@ -4,10 +4,10 @@
 NewsNow,  an Android application, Dagger Hilt, Coroutines,Jetpack (Room, ViewModel,Navigation LiveData) based on MVVM architecture. Also fetching data from the network and integrating local data in the database via repository pattern. this app also has DarkMode Feature
 </p>
 
-
+app/src/main/res/drawable/newsnow.png
 <h1 align="center">
   <br>
-  <img src="https://user-images.githubusercontent.com/39338964/95817788-4271d800-0d1a-11eb-9d97-dc899980e973.png" alt="FarmBuy" width="300">
+  <img src="/app/src/main/res/drawable/newsnow.png" alt="NewsNow" width="300">
 </h1>
 
 ## Tech stack - Library
