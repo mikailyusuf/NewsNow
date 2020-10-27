@@ -2,7 +2,6 @@ package com.newsnow.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -11,7 +10,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -22,10 +20,15 @@ import com.newsnow.R
 import com.newsnow.adapters.NewsAdapter
 import com.newsnow.utils.Constants
 import com.newsnow.utils.Constants.Companion.QUERY_PAGE_SIZE
+import com.newsnow.utils.Constants.Companion.SEARCH_DELAY
 import com.newsnow.utils.Resource
 import com.newsnow.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_news.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -37,10 +40,6 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
 
         setupRecycler()
 
-//        swipeRefreshLayout.setOnRefreshListener {
-//            setupRecycler()
-//
-//        }
         newsAdapter.setOnItemClickListener {
 
             val bundle = Bundle().apply {
@@ -188,6 +187,9 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
         menu.clear()
         inflater.inflate(R.menu.search_menu, menu)
         val searchView = SearchView(activity)
+
+        var job: Job? = null
+
         menu.findItem(R.id.appSearchBar).apply {
             setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
             actionView = searchView
@@ -198,7 +200,13 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
                 return false
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
+            override fun onQueryTextChange(query: String): Boolean {
+
+                job?.cancel()
+            job = MainScope().launch {
+                delay(SEARCH_DELAY)
+                searchNews(query)
+            }
 
                 return false
             }
@@ -206,15 +214,15 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
 
         searchView.setOnCloseListener(object : SearchView.OnCloseListener {
             override fun onClose(): Boolean {
-                Log.d("rubbish", "rubbish")
+                activity?.let { view?.let { it1 -> Utils.hideSoftKeyBoard(it, it1) } }
+                newsViewModel.getBreakingNews("ng")
                 return false
             }
 
         })
 
-        searchView.setOnQueryTextFocusChangeListener(object:View.OnFocusChangeListener{
+        searchView.setOnQueryTextFocusChangeListener(object : View.OnFocusChangeListener {
             override fun onFocusChange(p0: View?, p1: Boolean) {
-                Log.d("rubbish", "rubbish")
                 activity?.let { view?.let { it1 -> Utils.hideSoftKeyBoard(it, it1) } }
 
             }
@@ -226,7 +234,8 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
         newsViewModel.getSearchNews(searhQuery)
 
 
-    } }
+    }
+}
 
 object Utils {
 

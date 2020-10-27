@@ -8,6 +8,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+
+
+
+        <string-array name="countries">
+            <item>Nigeria</item>
+            <item>US</item>
+            <item>Saudi Arabia</item>
+            <item>France</item>
+            <item>UK</item>
+            <item>Japan</item>
+        </string-array>
     </style>
 
 </resources>
