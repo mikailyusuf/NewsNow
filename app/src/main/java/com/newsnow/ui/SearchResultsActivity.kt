@@ -23,10 +23,12 @@ class SearchResultsActivity : AppCompatActivity() {
     private fun handleIntent(intent: Intent) {
 
         if (Intent.ACTION_SEARCH == intent.action) {
+            Log.d("rubbish","query")
+
             val query = intent.getStringExtra(SearchManager.QUERY)
             if (query != null) {
-                textView.text = query
-                Log.d("search","MIKAIL IS TRYING TO SEARCH FOWR A NEWS ")
+
+                Log.d("rubbish",query)
             }
         }
     }
