@@ -15,6 +15,7 @@ NewsNow,  an Android application, Dagger Hilt, Coroutines,Jetpack (Room, ViewMod
 - [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 - JetPack
   - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) 
+  - [Paging 3](https://developer.android.com/topic/libraries/architecture/paging) 
   - [Lifecycle](https://developer.android.com/jetpack/androidx/releases/lifecycle) 
   - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) 
   - [Room](https://developer.android.com/topic/libraries/architecture/room)

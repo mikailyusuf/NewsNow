@@ -22,12 +22,16 @@ class NewsRepository @Inject constructor(private val apiHelper: ApiHelper) :
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
 
         try {
+            val currentLoadingPageKey = params.key ?: 1
             val nextPage = params.key ?: 1
             val response = apiHelper.getBreakingNews(NEWS_SOURCE, nextPage)
+
+
+            val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
             return LoadResult.Page(
                 data = response.body()!!.articles,
-                prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = PAGE_NUMBER + 1
+                prevKey = prevKey,
+                nextKey = currentLoadingPageKey.plus(1)
             )
         } catch (e: Exception) {
             return LoadResult.Error(e)

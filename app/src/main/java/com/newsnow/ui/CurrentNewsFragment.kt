@@ -2,6 +2,7 @@ package com.newsnow.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.newsnow.R
@@ -49,43 +51,67 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
         }
 
 
-        newsViewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+//        newsViewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
+//
+//            when (response) {
+//                is Resource.Success -> {
+//                    hideProgressBar()
+//                    response.data?.let { newsList ->
+//
+////                        newsAdapter.differ.submitList(newsList.articles.toList())
+//                        val totalPages = newsList.totalResults / QUERY_PAGE_SIZE + 2
+//                        isLastPage = newsViewModel.breakingNewsPage == totalPages
+//                        if (isLastPage) {
+//                            recyclerView.setPadding(0, 0, 0, 0)
+//                        }
+//
+//                    }
+//                }
+//
+//                is Resource.Error -> {
+//                    hideProgressBar()
+//                    response.message?.let {
+//                        Toast.makeText(activity, "Error Occured: $it", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//                is Resource.Loading -> {
+//                    showProgressBar()
+//                }
+//
+//
+//            }
+//
+//        })
 
-            when (response) {
-                is Resource.Success -> {
-                    hideProgressBar()
-                    response.data?.let { newsList ->
 
-                        newsAdapter.differ.submitList(newsList.articles.toList())
-                        val totalPages = newsList.totalResults / QUERY_PAGE_SIZE + 2
-                        isLastPage = newsViewModel.breakingNewsPage == totalPages
-                        if (isLastPage) {
-                            recyclerView.setPadding(0, 0, 0, 0)
-                        }
+        newsAdapter.addLoadStateListener { loadState ->
+            if (loadState.refresh is LoadState.Loading) {
+                showProgressBar()
+            } else {
+                hideProgressBar()
+                // getting the error
+                val error = when {
+                    loadState.prepend is LoadState.Error -> loadState.prepend as LoadState.Error
+                    loadState.append is LoadState.Error -> loadState.append as LoadState.Error
+                    loadState.refresh is LoadState.Error -> loadState.refresh as LoadState.Error
+                    else -> null
+                }
 
+                error.let {
+                    if (it != null) {
+                        Log.d("error",it.error.message.toString())
+
+//                        Toast.makeText(this, it.error.message, Toast.LENGTH_LONG).show()
                     }
                 }
-
-                is Resource.Error -> {
-                    hideProgressBar()
-                    response.message?.let {
-                        Toast.makeText(activity, "Error Occured: $it", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                is Resource.Loading -> {
-                    showProgressBar()
-                }
-
-
             }
+        }
 
-        })
-
-        CoroutineScope(Dispatchers.IO).launch {
-            newsViewModel.articles.collectLatest {article->
-                newsAdapter.differ.submitList(article)
-
+        CoroutineScope(Dispatchers.Main).launch {
+            newsViewModel.articles.collectLatest { article ->
+                newsAdapter.submitData(article)
+//                newsAdapter.submitList(article)
 
 
             }
@@ -99,7 +125,7 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
                     hideProgressBar()
                     response.data?.let { newsList ->
 
-                        newsAdapter.differ.submitList(newsList.articles.toList())
+//                        newsAdapter.differ.submitList(newsList.articles.toList())
 
                         val totalPages = newsList.totalResults / Constants.QUERY_PAGE_SIZE + 2
                         isLastPage = newsViewModel.searchNewsPage == totalPages
@@ -211,10 +237,10 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
             override fun onQueryTextChange(query: String): Boolean {
 
                 job?.cancel()
-            job = MainScope().launch {
-                delay(SEARCH_DELAY)
-                searchNews(query)
-            }
+                job = MainScope().launch {
+                    delay(SEARCH_DELAY)
+                    searchNews(query)
+                }
 
                 return false
             }
