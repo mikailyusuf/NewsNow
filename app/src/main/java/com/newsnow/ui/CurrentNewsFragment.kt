@@ -25,10 +25,8 @@ import com.newsnow.utils.Resource
 import com.newsnow.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_news.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 
 
 @AndroidEntryPoint
@@ -83,6 +81,16 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
             }
 
         })
+
+        CoroutineScope(Dispatchers.IO).launch {
+            newsViewModel.articles.collectLatest {article->
+                newsAdapter.differ.submitList(article)
+
+
+
+            }
+
+        }
 
         newsViewModel.searchNews.observe(viewLifecycleOwner, Observer { response ->
 

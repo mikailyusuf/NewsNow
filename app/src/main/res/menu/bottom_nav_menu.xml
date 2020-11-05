@@ -13,7 +13,7 @@
         android:title="SAVED NEWS"/>
 
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/settingsActivity"
         android:icon="@drawable/settings"
         android:title="SETTINGS"/>
 

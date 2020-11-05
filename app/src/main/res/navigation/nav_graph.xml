@@ -29,6 +29,7 @@
         <argument
             android:name="article"
             app:argType="com.newsnow.model.Article" />
+
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
@@ -66,4 +67,8 @@
             android:name="article"
             app:argType="com.newsnow.model.Article" />
     </activity>
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.newsnow.ui.SettingsActivity"
+        android:label="SettingsActivity" />
 </navigation>

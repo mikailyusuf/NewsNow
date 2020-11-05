@@ -5,4 +5,13 @@
     <string name="choose_theme_text">"Choose Theme Color"</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Search News</string>
+
+    <string-array name="countries">
+        <item>Nigeria</item>
+        <item>US</item>
+        <item>Saudi Arabia</item>
+        <item>France</item>
+        <item>UK</item>
+        <item>Japan</item>
+    </string-array>
 </resources>

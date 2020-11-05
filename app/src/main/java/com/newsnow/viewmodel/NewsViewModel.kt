@@ -13,29 +13,42 @@ import com.newsnow.repository.NewsRepository
 import com.newsnow.utils.Resource
 import kotlinx.coroutines.launch
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.newsnow.api.ApiHelper
+import com.newsnow.utils.Constants.Companion.NEWS_SOURCE
 import com.newsnow.utils.NetWorkHelper
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import java.io.IOException
 
 
 class NewsViewModel @ViewModelInject constructor(
     private val repository: NewsRepository,
-    private val networkHelper: NetWorkHelper
+    private val networkHelper: NetWorkHelper,
+    apiHelper: ApiHelper
 ) : ViewModel() {
 
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
     var breakingNewsResponse: NewsResponse? = null
 
-
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var searchNewsPage = 1
     var searchNewsResponse: NewsResponse? = null
 
 
+    val articles: Flow<PagingData<Article>> = Pager(PagingConfig(pageSize = 20)) {
+        NewsRepository(apiHelper)
+    }.flow
+        .cachedIn(viewModelScope)
+
+
     init {
 
-        getBreakingNews("ng")
+        getBreakingNews(NEWS_SOURCE)
     }
 
     fun getBreakingNews(countryCode: String) = viewModelScope.launch {
