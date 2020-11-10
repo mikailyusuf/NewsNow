@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.newsnow.R
 import com.newsnow.adapters.NewsAdapter
+import com.newsnow.adapters.NewsAdapter2
 import com.newsnow.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_news.*
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_saved_news.*
 class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
     private val newsViewModel : NewsViewModel by viewModels()
-    lateinit var newsAdapter: NewsAdapter
+    lateinit var newsAdapter: NewsAdapter2
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,9 +52,9 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-//                val article = newsAdapter.differ.currentList[position]
-//                newsViewModel.deleteNews(article)
-                Snackbar.make(view, "Successfully DEleted News", Snackbar.LENGTH_SHORT).apply {
+                val article = newsAdapter.differ.currentList[position]
+                newsViewModel.deleteNews(article)
+                Snackbar.make(view, "Successfully Deleted News", Snackbar.LENGTH_SHORT).apply {
                     setAction("Undo") {
 //                        newsViewModel.saveArticle(article)
                     }.show()
@@ -66,13 +67,13 @@ class SavedNewsFragment : Fragment(R.layout.fragment_saved_news) {
         }
 
         newsViewModel.getSavedNews().observe(viewLifecycleOwner, Observer { article->
-//            newsAdapter.differ.submitList(article)
+            newsAdapter.differ.submitList(article)
         })
     }
 
     private fun setupRecycler()
     {
-        newsAdapter = NewsAdapter()
+        newsAdapter = NewsAdapter2()
         recyclerView.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)

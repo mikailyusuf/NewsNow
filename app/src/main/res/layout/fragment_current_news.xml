@@ -55,7 +55,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-
             app:mk_color="@color/colorAccent"
             app:mk_type="ClassicSpinner" />
     </androidx.constraintlayout.widget.ConstraintLayout>

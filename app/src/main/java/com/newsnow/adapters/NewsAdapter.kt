@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.newsnow.R
 import com.newsnow.model.Article
 import kotlinx.android.synthetic.main.article_layout.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(ArticleComparator) {
@@ -62,11 +63,17 @@ class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(Article
 //            source.text = article.source?.name
 //            tittle.text = article.title
 
+            val parser =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val formattedDate = formatter.format(parser.parse(getItem(position)?.publishedAt))
+
+
             tittle.text = getItem(position)?.title
             source.text = getItem(position)?.source?.name
             Glide.with(this).load(getItem(position)?.urlToImage).into(image)
             description.text = getItem(position)?.description
-            date.text = getItem(position)?.publishedAt
+            date.text = formattedDate
+//                getItem(position)?.publishedAt
 
 
 

@@ -1,16 +1,23 @@
 package com.newsnow.ui
 
 //import kotlinx.android.synthetic.main.activity_article.webView
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.newsnow.R
 import com.newsnow.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_article.*
 
 @AndroidEntryPoint
 
@@ -39,11 +46,42 @@ class ArticleActivity : AppCompatActivity() {
                     }
                     return true
                 }
+
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    progressBar.visibility = View.VISIBLE
+
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    progressBar.visibility = View.INVISIBLE
+
+                }
+
+                override fun onReceivedHttpError(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                    errorResponse: WebResourceResponse?
+                ) {
+                    super.onReceivedHttpError(view, request, errorResponse)
+                    progressBar.visibility = View.INVISIBLE
+
+                 Toast.makeText(this@ArticleActivity,"Sorry an Error Ocured While loading the Page",Toast.LENGTH_SHORT).show()
+
+                }
+
+
             }
-            webView.loadUrl(url)
+//            webView.loadUrl(url)
+
+
         }
         fab.setOnClickListener {
             newsViewModel.saveArticle(article)
+
+            Snackbar.make(it, "News Saved", Snackbar.LENGTH_SHORT).show()
+            }
 
         }
 
