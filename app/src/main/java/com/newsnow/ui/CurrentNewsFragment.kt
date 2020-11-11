@@ -216,53 +216,53 @@ class CurrentNewsFragment : Fragment(R.layout.fragment_current_news) {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.search_menu, menu)
-        val searchView = SearchView(activity)
-
-        var job: Job? = null
-
-        menu.findItem(R.id.appSearchBar).apply {
-            setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            actionView = searchView
-        }
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                searchNews(query)
-                return false
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-
-                job?.cancel()
-                job = MainScope().launch {
-                    delay(SEARCH_DELAY)
-                    searchNews(query)
-                }
-
-                return false
-            }
-        })
-
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener {
-            override fun onClose(): Boolean {
-                activity?.let { view?.let { it1 -> Utils.hideSoftKeyBoard(it, it1) } }
-                newsViewModel.getBreakingNews("ng")
-                return false
-            }
-
-        })
-
-        searchView.setOnQueryTextFocusChangeListener(object : View.OnFocusChangeListener {
-            override fun onFocusChange(p0: View?, p1: Boolean) {
-                activity?.let { view?.let { it1 -> Utils.hideSoftKeyBoard(it, it1) } }
-
-            }
-
-        })
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        menu.clear()
+//        inflater.inflate(R.menu.search_menu, menu)
+//        val searchView = SearchView(activity)
+//
+//        var job: Job? = null
+//
+//        menu.findItem(R.id.appSearchBar).apply {
+//            setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW or MenuItem.SHOW_AS_ACTION_IF_ROOM)
+//            actionView = searchView
+//        }
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String): Boolean {
+//                searchNews(query)
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(query: String): Boolean {
+//
+//                job?.cancel()
+//                job = MainScope().launch {
+//                    delay(SEARCH_DELAY)
+//                    searchNews(query)
+//                }
+//
+//                return false
+//            }
+//        })
+//
+//        searchView.setOnCloseListener(object : SearchView.OnCloseListener {
+//            override fun onClose(): Boolean {
+//                activity?.let { view?.let { it1 -> Utils.hideSoftKeyBoard(it, it1) } }
+//                newsViewModel.getBreakingNews("ng")
+//                return false
+//            }
+//
+//        })
+//
+//        searchView.setOnQueryTextFocusChangeListener(object : View.OnFocusChangeListener {
+//            override fun onFocusChange(p0: View?, p1: Boolean) {
+//                activity?.let { view?.let { it1 -> Utils.hideSoftKeyBoard(it, it1) } }
+//
+//            }
+//
+//        })
+//    }
 
     private fun searchNews(searhQuery: String) {
         newsViewModel.getSearchNews(searhQuery)

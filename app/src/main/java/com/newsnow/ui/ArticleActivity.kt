@@ -1,6 +1,5 @@
 package com.newsnow.ui
 
-//import kotlinx.android.synthetic.main.activity_article.webView
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
@@ -86,4 +85,3 @@ class ArticleActivity : AppCompatActivity() {
         }
 
     }
-}

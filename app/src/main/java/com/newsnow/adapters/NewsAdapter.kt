@@ -64,7 +64,7 @@ class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(Article
 //            tittle.text = article.title
 
             val parser =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-            val formatter = SimpleDateFormat("yyyy-MM-dd")
+            val formatter = SimpleDateFormat("dd-MMMM-yyyy")
             val formattedDate = formatter.format(parser.parse(getItem(position)?.publishedAt))
 
 
