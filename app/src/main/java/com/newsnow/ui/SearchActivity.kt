@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.newsnow.R
@@ -17,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_search.*
 
 @AndroidEntryPoint
-class SearchActivity : Activity() {
+class SearchActivity : AppCompatActivity() {
     private val newsViewModel: NewsViewModel by viewModels()
     private lateinit var newsAdapter: NewsAdapter2
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +60,7 @@ class SearchActivity : Activity() {
 
 
     override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
         handleIntent(intent)
     }
 
