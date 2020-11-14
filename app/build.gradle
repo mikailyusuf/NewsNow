@@ -10,6 +10,10 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.0"
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.newsnow"
         minSdkVersion 18
