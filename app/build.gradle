@@ -127,6 +127,9 @@ dependencies {
     // optional - Guava ListenableFuture support
     implementation "androidx.paging:paging-guava:$paging_version"
 
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 }
 kapt {
     correctErrorTypes true

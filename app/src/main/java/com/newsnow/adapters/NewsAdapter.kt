@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.newsnow.R
+import com.newsnow.databinding.ArticleLayoutBinding
 import com.newsnow.model.Article
 import kotlinx.android.synthetic.main.article_layout.view.*
 import java.text.SimpleDateFormat
@@ -18,7 +19,7 @@ import java.util.*
 class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(ArticleComparator) {
 
 
-    inner class  NewsViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
+    inner class  NewsViewHolder(val binding: ArticleLayoutBinding):RecyclerView.ViewHolder(binding.root)
 
 
 //    private val differCallback =  object :DiffUtil.ItemCallback<Article>(){
@@ -44,8 +45,14 @@ class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(Article
     }
 
 //    val differ = AsyncListDiffer(this@NewsAdapter,differCallback)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsAdapter.NewsViewHolder {
-        return NewsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.article_layout,parent,false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):NewsViewHolder {
+
+    val layoutInflater = LayoutInflater.from(parent.context)
+    val binding = ArticleLayoutBinding.inflate(layoutInflater)
+    return NewsViewHolder(binding)
+
+//        return NewsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.article_layout,parent,false))
+
     }
 
 //    override fun getItemCount(): Int {
@@ -55,7 +62,9 @@ class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(Article
 
     override fun onBindViewHolder(holder:NewsViewHolder, position: Int) {
 
-
+        val currentArticle = getItem(position)
+        holder.binding.article = currentArticle
+        holder.binding.executePendingBindings()
 
         holder.itemView.apply {
 
@@ -68,10 +77,10 @@ class NewsAdapter: PagingDataAdapter<Article,NewsAdapter.NewsViewHolder>(Article
             val formattedDate = formatter.format(parser.parse(getItem(position)?.publishedAt))
 
 
-            tittle.text = getItem(position)?.title
-            source.text = getItem(position)?.source?.name
-            Glide.with(this).load(getItem(position)?.urlToImage).into(image)
-            description.text = getItem(position)?.description
+//            tittle.text = getItem(position)?.title
+//            source.text = getItem(position)?.source?.name
+//            Glide.with(this).load(getItem(position)?.urlToImage).into(image)
+//            description.text = getItem(position)?.description
             date.text = formattedDate
 //                getItem(position)?.publishedAt
 

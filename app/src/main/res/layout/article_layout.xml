@@ -13,8 +13,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:background="@color/colorPrimaryDark"
+        android:layout_margin="8dp"
+
         android:elevation="5dp"
         app:cardCornerRadius="8dp">
 
@@ -31,8 +32,9 @@
                 android:layout_height="200dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                app:setImageUrl="@{article.urlToImage}"
                 android:layout_marginEnd="8dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +47,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="sans-serif-thin"
-                android:text="TextView"
+                android:text="@{article.source.name}"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image" />
@@ -56,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text="@{article.title}"
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +71,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="casual"
-                android:text="TextView"
+                android:text="@{article.description}"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tittle" />
@@ -81,7 +83,6 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-thin"
-                android:text="TextView"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description" />
@@ -90,3 +91,5 @@
 
     </androidx.cardview.widget.CardView>
 </layout>
+
+<!--    android:text="@{article.publishedAt}"-->

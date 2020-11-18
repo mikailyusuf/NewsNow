@@ -12,9 +12,9 @@
         android:icon="@drawable/storage"
         android:title="SAVED NEWS"/>
 
-    <item
-        android:id="@+id/settingsActivity"
-        android:icon="@drawable/settings"
-        android:title="SETTINGS"/>
+<!--    <item-->
+<!--        android:id="@+id/settingsActivity"-->
+<!--        android:icon="@drawable/settings"-->
+<!--        android:title="SETTINGS"/>-->
 
 </menu>
